@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage[section]{placeins}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue,
+    urlcolor = cyan
+}
+
+\geometry{a4paper, margin=2.5cm}
+
+\title{Documentación Práctica Hilos Coches - Interfaz}
+\author{Daniel Calvar Cruz}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+\hyperlink{anchor-indice}{\textbf{Volver}}\\
+
+Implementación de interfaz gráfica al ejercicio de carreras de coches con uso de threads, con el añadido de Synchronize.
+
+\section{Estructura}
+\hyperlink{anchor-indice}{\textbf{Volver}}\\
+
+La aplicación está estructurada siguiendo el sistema MVC (Modelo-Vista-Controlador), que proporciona una clara separación de responsabilidades entre la interfaz gráfica, la lógica del negocio y los datos.
+
+
+CarreraApplication lanza \verb|carrera-view.fxml|, controlado por \verb|CarreraController|, que se ocupa de toda la lógica de negocio de la carrera en si, comienzo, fin y funcionamiento. Este controlador usa las clases:
+\begin{itemize}
+  \item Carrera: crea un hilo para cada carrera. Muestra el podio al finalizar.
+  \item Coche: crea los hilos de Coche usados para cada carrera, logica para las vueltas y control de UI.
+\end{itemize}
+
+\section{Synchronize}
+\hyperlink{anchor-indice}{\textbf{Volver}}\\
+
+Usamos \verb|Synchronize| en:
+
+\begin{itemize}
+  \item \verb|agregarCoche| (Carrera): para agregar los coches que han finalizado la carrera a la lista que se emplea en la creación del podio.
+  \item Mecanica de aceleracion (Coche): mecánica de aceleración que controla la distancia recorrida de cada coche.
+  \begin{verbatim}
+    // mecanica de aceleracion
+            synchronized (this) {
+                int aceleracion = (int)(Math.random() * 10) + 1;
+
+                // para inicio de carrera o funcionamiento normal
+                if (velocidadActual == 0 || velocidadActual < velocidadMaxima) {
+                    velocidadActual += aceleracion;
+                    distanciaRecorridaEnVuelta += velocidadActual;
+                }
+
+                // penalizacion para sobrepasado de velocidad maxima
+                if (velocidadActual >= velocidadMaxima) {
+                    velocidadActual -= aceleracion * 2;
+                    distanciaRecorridaEnVuelta += velocidadActual;
+                }
+            }
+  \end{verbatim}
+  \item Verificar vueltas (Coche): verifica la "posición" del coche para saber cuando completa una vuelta:
+  \begin{verbatim}
+    // verificar vueltas
+            synchronized (this) {
+                if (distanciaRecorridaEnVuelta > (distanciaVuelta / 2) && mitadVueltaFlag) {
+                    mitadVueltaFlag = false;
+                }
+
+                if (distanciaRecorridaEnVuelta >= distanciaVuelta) {
+                    vueltaActual++;
+                    distanciaRecorridaEnVuelta = 0;
+                    mitadVueltaFlag = true;
+
+                    // actualizar pogreso
+                    if (controller != null && controller.isCarreraEnCurso()) {
+                        controller.actualizarProgresoGeneral();
+                    }
+
+                    Platform.runLater(() -> {
+                        if (!isInterrupted()) {
+                            estadoLabel.setText("Vuelta " + (vueltaActual + 1) + "/" + numeroVueltas);
+                        }
+                    });
+                }
+            }
+  \end{verbatim}
+  \item \verb|actualizarProgresoGeneral| (CarreraController): actualización de la barra de progreso general cada vez que un coche completa una vuelta.
+\end{itemize}
+
+\section{Interfaz}
+\hyperlink{anchor-indice}{\textbf{Volver}}\\
+
+El diseño se estructura en secciones claramente definidas que facilitan la comprensión y el uso del sistema.
+
+Estructura General:
+
+La interfaz se organiza en un contenedor principal VBox que alberga todas las secciones, proporcionando un flujo visual descendente claro e intuitivo.
+
+\begin{itemize}
+    \item Encabezado
+    \item Pistas
+    \item Podio (oculto hasta final de carrera)
+    \item Botonera
+\end{itemize}
+
+Características Técnicas
+\begin{itemize}
+    \item Actualización en tiempo 'real' de estados
+    \item Interfaz intuitiva y fácil de usar
+\end{itemize}
+
+\section{Requisitos y tecnologías}
+\hyperlink{anchor-indice}{\textbf{Volver}}\\
+
+Dependencias:
+\begin{itemize}
+    \item Maven v4.0.0
+    \item Junit v5.12.1
+    \item javafx-controls v21.0.6
+    \item javafx-fxml v21.0.6
+    \item jupiter-api v5.12.1
+    \item jupiter-engine v5.12.1
+\end{itemize}
+
+Plugins:
+\begin{itemize}
+    \item maven-compiler-plugin v3.13.0
+    \item javafx-maven-plugin v0.0.8
+\end{itemize}
+
+IDE:
+\begin{itemize}
+    \item IntelliJ IDEA 2025.2.1 (Community Edition)
+    \item Build IC-252.25557.131, built on August 27, 2025
+    \item Source revision: ee1e6cb62e111
+    \item Runtime version: 21.0.8+1-b1038.68 amd64 (JCEF 122.1.9)
+    \item VM: OpenJDK 64-Bit Server VM by JetBrains s.r.o.
+    \item Toolkit: sun.awt.windows.WToolkit
+\end{itemize}
+
+\end{document}
