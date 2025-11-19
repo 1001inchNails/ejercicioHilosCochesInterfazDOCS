@@ -153,6 +153,17 @@ INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmbx12
 OUTPUT readme.toc
 INPUT C:\Users\danielcc\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmtt12.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr8.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmr6.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi12.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi8.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmmi6.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy10.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy8.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmsy6.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmex10.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex8.tfm
+INPUT C:\Users\danielcc\AppData\Local\Programs\MiKTeX\fonts\tfm\public\amsfonts\cmextra\cmex7.tfm
 INPUT readme.aux
 INPUT .\readme.out
 INPUT .\readme.out
